@@ -4,6 +4,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   reactCompiler: true,
+  allowedDevOrigins: ["disloyal-corridor-mousiness.ngrok-free.dev"],
   // turbopack: {
   //   root: dirname(__filename),
   // },

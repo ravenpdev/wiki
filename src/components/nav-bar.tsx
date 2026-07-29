@@ -5,6 +5,7 @@ import {
   NavigationMenuItem,
 } from "@/components/ui/navigation-menu";
 import { Button } from "@/components/ui/button";
+import { Show, UserButton } from "@clerk/nextjs";
 
 export function NavBar() {
   return (
@@ -20,15 +21,22 @@ export function NavBar() {
         </div>
         <NavigationMenu>
           <NavigationMenuList className="flex items-center gap-2">
+            <Show when="signed-out">
+              <NavigationMenuItem>
+                <Button asChild variant="outline">
+                  <Link href="/sign-in">Sign In</Link>
+                </Button>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <Button asChild>
+                  <Link href="/sign-up">Sign Up</Link>
+                </Button>
+              </NavigationMenuItem>
+            </Show>
             <NavigationMenuItem>
-              <Button asChild variant="outline">
-                <Link href="/signin">Sign In</Link>
-              </Button>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Button asChild>
-                <Link href="/signup">Sign Up</Link>
-              </Button>
+              <Show when="signed-in">
+                <UserButton />
+              </Show>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
