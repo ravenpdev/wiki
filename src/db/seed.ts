@@ -1,13 +1,15 @@
 import "dotenv/config";
 import { reset, seed } from "drizzle-seed";
 import { articles, users } from "@/db/schema";
-import { drizzle } from "drizzle-orm/node-postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 
 const SEED_COUNT = 25;
 const SEED = 1337;
 
 async function main() {
-  const db = drizzle(process.env.DATABASE_URL!);
+  const client = postgres(process.env.DATABASE_URL!, { prepare: false });
+  const db = drizzle(client);
   try {
     console.log(`🌱 Starting DB seed with seed ${SEED}...`);
 
