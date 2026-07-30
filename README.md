@@ -9,10 +9,9 @@ A full-stack wiki application built with modern web technologies, focusing on si
 - **Postgres** (local) or **Neon Postgres** (production)
 - **Clerk** account for authentication
 - **Upstash Redis** (optional, for server-side caching)
+- **Resend** for sending emails
 
 > **Note:** Redis is included primarily as a learning exercise. You don't need it until your application actually benefits from server-side caching.
-
----
 
 ## Tech Stack
 
@@ -24,13 +23,9 @@ A full-stack wiki application built with modern web technologies, focusing on si
 - Vercel Blob Storage
 - shadcn/ui
 
----
-
 ## Project Status
 
 🚧 **In Progress**
-
----
 
 ## Notes
 
