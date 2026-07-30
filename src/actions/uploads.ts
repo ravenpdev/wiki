@@ -1,5 +1,6 @@
 "use server";
 
+import { put } from "@vercel/blob";
 import { auth } from "@clerk/nextjs/server";
 
 export type UploadedFile = {
@@ -35,10 +36,27 @@ export async function uploadFile(formData: FormData): Promise<UploadedFile> {
     throw new Error("File too large");
   }
 
-  return {
-    url: "/uploads/mock-image.jpg",
-    size: file.size,
-    type: file.type,
-    filename: file.name,
-  };
+  try {
+    const blob = await put(file.name, file, {
+      access: "public",
+      addRandomSuffix: true,
+    });
+
+    return {
+      url: blob.url,
+      size: file.size,
+      type: file.type,
+      filename: blob.pathname ?? file.name,
+    };
+  } catch (e) {
+    console.error("Vercel Blobl upload error", e);
+    throw new Error("Upload fail");
+  }
+
+  // return {
+  //   url: "/uploads/mock-image.jpg",
+  //   size: file.size,
+  //   type: file.type,
+  //   filename: file.name,
+  // };
 }

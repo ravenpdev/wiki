@@ -1,5 +1,6 @@
 "use server";
 
+import redis from "@/cache";
 import { db } from "@/db";
 import { articles } from "@/db/schema";
 import isAuthorizedToEditArticle from "@/repositories/auth";
@@ -33,10 +34,13 @@ export async function createArticle(data: CreateArticleInput) {
       slug: `${Date.now()}`,
       published: true,
       authorId: userId,
+      imageUrl: data.imageUrl ?? undefined,
     })
     .returning({ id: articles.id });
 
   const articleId = response[0]?.id;
+
+  await redis.del("articles:all");
 
   return { success: true, message: "Article create logged", id: articleId };
 }
@@ -59,6 +63,7 @@ export async function updateArticle(id: string, data: UpdateArticleInput) {
     .set({
       title: data.title,
       content: data.content,
+      imageUrl: data.imageUrl ?? undefined,
     })
     .where(eq(articles.id, +id));
 
