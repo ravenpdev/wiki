@@ -1,8 +1,6 @@
-"use server";
-
+import { db } from "@/db";
+import { articles, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { db } from "..";
-import { articles, users } from "../schema";
 
 export async function getArticles() {
   const response = await db

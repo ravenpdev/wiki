@@ -1,5 +1,5 @@
 import WikiEditor from "@/components/wiki-editor";
-import { getArticleById } from "@/db/queries/articles";
+import { getArticleById } from "@/repositories/articles";
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 
@@ -21,7 +21,7 @@ export default async function EditArticlePage({
     notFound();
   }
 
-  const canEdit = article.authorId === userId;
+  const isEditing = article.authorId === userId;
 
   return (
     <WikiEditor
@@ -29,7 +29,7 @@ export default async function EditArticlePage({
       userId={userId}
       initialTitle={article.title}
       initialContent={article.content}
-      isEditing={canEdit}
+      isEditing={isEditing}
     />
   );
 }

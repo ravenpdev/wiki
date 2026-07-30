@@ -1,6 +1,6 @@
 import { NavBar } from "@/components/nav-bar";
 import { WikiCard } from "@/components/wiki-card";
-import { getArticles } from "@/db/queries/articles";
+import { getArticles } from "@/repositories/articles";
 
 export default async function Home() {
   const articles = await getArticles();

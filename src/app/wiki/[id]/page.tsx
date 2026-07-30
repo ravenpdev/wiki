@@ -1,5 +1,5 @@
 import WikiArticleViewer from "@/components/wiki-article-viewer";
-import { getArticleById } from "@/db/queries/articles";
+import { getArticleById } from "@/repositories/articles";
 import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 

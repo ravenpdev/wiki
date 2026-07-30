@@ -2,6 +2,7 @@
 
 import { db } from "@/db";
 import { articles } from "@/db/schema";
+import isAuthorizedToEditArticle from "@/repositories/auth";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
@@ -49,13 +50,8 @@ export async function updateArticle(id: string, data: UpdateArticleInput) {
 
   console.log("updateArticle called:", { id, ...data });
 
-  const [article] = await db
-    .select()
-    .from(articles)
-    .where(eq(articles.id, Number(id)));
-
-  if (article.authorId !== userId) {
-    throw new Error("Forbidden: you do not own this article");
+  if (!isAuthorizedToEditArticle(userId, Number(id))) {
+    throw new Error("Forbidden");
   }
 
   await db
@@ -70,10 +66,14 @@ export async function updateArticle(id: string, data: UpdateArticleInput) {
 }
 
 export async function deleteArticle(id: string) {
-  const { isAuthenticated } = await auth();
+  const { isAuthenticated, userId } = await auth();
 
   if (!isAuthenticated) {
     throw new Error("Unauthorized");
+  }
+
+  if (!isAuthorizedToEditArticle(userId, Number(id))) {
+    throw new Error("Forbidden");
   }
 
   console.log("deleteArticle called:", id);

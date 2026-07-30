@@ -20,7 +20,9 @@ export async function POST(req: NextRequest) {
     if (evt.type === "user.created") {
       await db.insert(users).values({
         id: evt.data.id,
-        email: evt.data.primary_email_address_id,
+        email: evt.data.email_addresses.filter(
+          (email) => email.id === evt.data.primary_email_address_id,
+        )[0].email_address,
         name: `${evt.data.first_name} ${evt.data.last_name}`,
       });
     }
