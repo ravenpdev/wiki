@@ -14,10 +14,7 @@ export const articles = pgTable("articles", {
   updatedAt: timestamp("updated_at", { mode: "string" }).defaultNow().notNull(),
 });
 
-const schema = { articles };
-export default schema;
-
-export type Article = typeof articles.$inferInsert;
+export type Article = typeof articles.$inferSelect;
 export type NewArticle = typeof articles.$inferInsert;
 
 export const users = pgTable("users", {
@@ -27,3 +24,6 @@ export const users = pgTable("users", {
 });
 
 export type User = typeof users.$inferSelect;
+
+const schema = { articles, users };
+export default schema;

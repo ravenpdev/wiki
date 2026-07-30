@@ -13,11 +13,7 @@ export type CreateArticleInput = {
   imageUrl?: string;
 };
 
-export type UpdateArticleInput = {
-  title?: string;
-  content?: string;
-  imageUrl?: string;
-};
+export type UpdateArticleInput = Partial<Omit<CreateArticleInput, "authorId">>;
 
 export async function createArticle(data: CreateArticleInput) {
   const { isAuthenticated, userId } = await auth();
@@ -74,7 +70,7 @@ export async function updateArticle(id: string, data: UpdateArticleInput) {
 }
 
 export async function deleteArticle(id: string) {
-  const { isAuthenticated, userId } = await auth();
+  const { isAuthenticated } = await auth();
 
   if (!isAuthenticated) {
     throw new Error("Unauthorized");
@@ -82,7 +78,7 @@ export async function deleteArticle(id: string) {
 
   console.log("deleteArticle called:", id);
 
-  const _response = db.delete(articles).where(eq(articles.id, +id));
+  await db.delete(articles).where(eq(articles.id, Number(id)));
 
   return { success: true, message: `Article ${id} delete logged (stub)` };
 }
