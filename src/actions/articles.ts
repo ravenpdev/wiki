@@ -1,5 +1,6 @@
 "use server";
 
+// import { summarArticle } from "@/ai/summarize";
 import redis from "@/cache";
 import { db } from "@/db";
 import { articles } from "@/db/schema";
@@ -26,6 +27,9 @@ export async function createArticle(data: CreateArticleInput) {
 
   console.log("createArticle called:", data);
 
+  // uncomment this if you setup vercel ai gateway - credit card is required
+  // const summary = await summarArticle(data.title || "", data.content || "");
+
   const response = await db
     .insert(articles)
     .values({
@@ -35,6 +39,7 @@ export async function createArticle(data: CreateArticleInput) {
       published: true,
       authorId: userId,
       imageUrl: data.imageUrl ?? undefined,
+      summary: data.content // change this to summary 
     })
     .returning({ id: articles.id });
 
@@ -54,6 +59,9 @@ export async function updateArticle(id: string, data: UpdateArticleInput) {
 
   console.log("updateArticle called:", { id, ...data });
 
+  // uncomment this if you setup vercel ai gateway - credit card is required
+  // const summary = await summarArticle(data.title || "", data.content || "");
+
   if (!isAuthorizedToEditArticle(userId, Number(id))) {
     throw new Error("Forbidden");
   }
@@ -64,6 +72,7 @@ export async function updateArticle(id: string, data: UpdateArticleInput) {
       title: data.title,
       content: data.content,
       imageUrl: data.imageUrl ?? undefined,
+      summary:  data.content // change this to summary 
     })
     .where(eq(articles.id, +id));
 

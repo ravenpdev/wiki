@@ -1,10 +1,17 @@
 import redis from "@/cache";
 import { db } from "@/db";
-import { articles, users } from "@/db/schema";
+import { Article, articles, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
+type ArticleList = Pick<
+  Article,
+  "title" | "id" | "createdAt" | "content" | "summary"
+> & {
+  author: string | null;
+};
+
 export async function getArticles() {
-  const cached = await redis.get("articles:all");
+  const cached = await redis.get<ArticleList[]>("articles:all");
 
   if (cached) {
     console.log("Get Articles Cache Hit!");
@@ -19,6 +26,7 @@ export async function getArticles() {
       createdAt: articles.createdAt,
       content: articles.content,
       author: users.name,
+      summary: articles.summary,
     })
     .from(articles)
     .leftJoin(users, eq(articles.authorId, users.id));
@@ -40,6 +48,7 @@ export async function getArticleById(id: number) {
       author: users.name,
       authorId: users.id,
       imageUrl: articles.imageUrl,
+      summary: articles.summary,
     })
     .from(articles)
     .where(eq(articles.id, id))

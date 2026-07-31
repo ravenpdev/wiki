@@ -12,6 +12,7 @@ export const articles = pgTable("articles", {
     .references(() => users.id),
   createdAt: timestamp("created_at", { mode: "string" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "string" }).defaultNow().notNull(),
+  summary: text("summary"),
 });
 
 export type Article = typeof articles.$inferSelect;

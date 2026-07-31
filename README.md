@@ -6,6 +6,7 @@ A full-stack wiki application built with modern web technologies, focusing on si
 
 - **Node.js** v24 or later
 - **Vercel** (deployment and Blob Storage for image uploads)
+- **Vercel AI Gateway** (need credit card) using AI to summarize the article content
 - **Postgres** (local) or **Neon Postgres** (production)
 - **Clerk** account for authentication
 - **Upstash Redis** (optional, for server-side caching)
